@@ -1,18 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
-todolist = Flask(__name__)
+app = Flask(__name__)
+
 USER_DATA = {
     "testuser": "1234"
 }
 
 USER_INFO = {}
 
-@todolist.route('/')
+@app.route('/')
 def defaultpage():
     return render_template("default.html")
 
-@todolist.route('/login', methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def loginpage():
     if request.method == "POST":
         user_id = request.form.get("id")
@@ -25,11 +26,11 @@ def loginpage():
     
     return render_template("login.html") 
 
-@todolist.route('/main')
+@app.route('/main')
 def mainpage():
     return render_template("main.html")
 
-@todolist.route('/join', methods=["GET","POST"])
+@app.route('/join', methods=["GET","POST"])
 def join():
     if request.method == "POST":
         user_id = request.form.get("id")
@@ -41,12 +42,12 @@ def join():
     
     return render_template("join.html")
 
-@todolist.route('/taskmain')
+@app.route('/taskmain')
 def taskmain():
     return render_template("taskmain.html")
 
 if __name__ == '__main__':
-    todolist.run(host='127.0.0.1', port=5500)
+    app.run(host='127.0.0.1', port=5000)
 
 
 
@@ -81,12 +82,12 @@ with app.app_context():
 #웹페이지 코드
 
 #홈화면 (체크박스만 있는 화면)
-@todolist.route('/')
+@app.route('/')
 def defaultpage():
     return render_template("default.html")
 
 #로그인 화면
-@todolist.route('/login', methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def loginpage():
     if request.method == "POST":
         user_id = request.form.get("id")
@@ -101,7 +102,7 @@ def loginpage():
     return render_template("login.html")
 
 #회원가입 페이지로 이동
-@todolist.route('/join', methods=["GET", "POST"])
+@app.route('/join', methods=["GET", "POST"])
 def join():
     if request.method == "POST":
         user_id = request.form.get("id")
@@ -119,7 +120,7 @@ def join():
     return render_template("join.html")
 
 #여기가 달력있는 투두리스트 본 페이지
-@todolist.route('/taskmain')
+@app.route('/taskmain')
 def taskmain():
     return render_template("taskpage.html")
 
