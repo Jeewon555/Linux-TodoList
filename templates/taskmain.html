@@ -14,9 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!--✅아이콘-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 
+    <!--✅아이콘 디자인-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 
     <!--css코드: 건들지 마세요 (디자인같은거입니다..)-->
     <style>
@@ -112,32 +112,33 @@
                 </div>
             </div>
 
-            <!-- ✅ id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 -->
+            <!-- ✅ id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 (class 변경) -->
             <div id="categoryItems" class="p-4 flex-1 overflow-y-auto">
                 <h2 class="text-sm font-medium text-gray-500 mb-2">카테고리</h2>
-                <!-- ✅ 카테고리 추가 버튼 id-->
+                <!-- ✅ 카테고리 추가 버튼 id (id 추가함)-->
                 <div class="space-y-1" id="categoryListContainer">
 
-                    <!--마음 카테고리-->
+                    <!--팀플 카테고리(기본으로 1개만)-->
                     <div class="category-item flex items-center px-3 py-2 rounded bg-green-50 hover:bg-gray-50 group">
                         <div class="w-6 h-6 flex items-center justify-center mr-2 text-green-500">
                             <i class="ri-heart-line"></i>
                         </div>
-                        <!-- ✅ 기본 카테고리 이름은 수정 가능하도록 span에 contenteditable false -->
-                        <span contenteditable="false" class="category-name text-green-600 font-medium">마음</span>
+                        <!-- ✅ 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
+                        <span contenteditable="false" class="category-name text-green-600 font-medium">팀플</span>
                         <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
-                            <!-- ✅ 연필 아이콘: 클릭 시 텍스트 수정 가능 -->
+                            <!-- ✅ 연필 아이콘 ("eidt-btn" 추가) -->
                             <button class="edit-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <!--✅ 삭제 아이콘 버튼 (오른쪽 끝)-->
+                            <!--✅ 삭제 아이콘 버튼 ("delete-btn" 추가)-->
                             <button class="delete-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
                                 <i class="ri-delete-bin-line"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!--✅ 고정 되는 카테고리 추가 버튼-->
+
+                    <!--✅ 카테고리 추가 버튼(고정임)-->
                     <button id="addCategoryBtn" class="mt-4 w-full flex items-center justify-center gap-2 text-sm text-white bg-primary hover:bg-green-500 py-2 px-4 rounded-button shadow transition-all duration-200">
                         <i class="ri-add-line text-lg"></i>
                         <span>카테고리 추가</span>
@@ -145,7 +146,6 @@
 
             </div>
         </div>
-
 
         <!--메인콘텐츠-->
         <div class="flex-1 flex flex-col min-h-0 h-full p-6">
@@ -425,9 +425,9 @@
 
     // ✅ 카테고리 동작 바인딩 함수
 function activateCategoryItemEvents(item) {
-    const textElement = item.querySelector('.category-name');
-    const editBtn = item.querySelector('.edit-btn');
-    const deleteBtn = item.querySelector('.delete-btn');
+    const textElement = item.querySelector('.category-name');   //클릭
+    const editBtn = item.querySelector('.edit-btn');            //수정
+    const deleteBtn = item.querySelector('.delete-btn');        //삭제
 
     // 선택 시 강조 표시
     item.addEventListener('click', () => {
@@ -435,34 +435,36 @@ function activateCategoryItemEvents(item) {
         item.classList.add('bg-green-50');
     });
 
-    // ✅ 수정 버튼 클릭 시 contenteditable 적용
+    // ✅ 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
     editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         textElement.setAttribute('contenteditable', 'true');
         textElement.focus();
+
         textElement.addEventListener('blur', () => {
             textElement.setAttribute('contenteditable', 'false');
         }, { once: true });
     });
 
-    // ✅ 삭제 버튼 클릭 시
+    // ✅ 휴지통 아이콘 클릭 시
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         item.remove();
     });
 }
 
-// ✅ 초기 카테고리에 이벤트 바인딩
+// ✅ 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
 activateCategoryItemEvents(document.querySelector('.category-item'));
 
-// ✅ 카테고리 추가 기능
+// ✅ 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
 document.getElementById('addCategoryBtn').addEventListener('click', () => {
     const newItem = document.createElement('div');
     newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
     newItem.innerHTML = `
             <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
-                <i class="ri-folder-line"></i>
+                <i class="ri-heart-line"></i>
             </div>
+
             <span class="category-name text-blue-600 font-medium" contenteditable="false">새 카테고리</span>
 
             <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
@@ -479,6 +481,12 @@ document.getElementById('addCategoryBtn').addEventListener('click', () => {
         container.insertBefore(newItem, addButton); // ✅ 추가 버튼 바로 위에 삽입
         activateCategoryItemEvents(newItem);
     });
+
+
+
+
+
+
     </script>
 </body>
 </html>
