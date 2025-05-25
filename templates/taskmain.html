@@ -138,7 +138,7 @@
                     </div>
 
 
-                    <!--✅ 카테고리 추가 버튼(고정임)-->
+                    <!--✅ 카테고리 추가 버튼(고정버튼임)-->
                     <button id="addCategoryBtn" class="mt-4 w-full flex items-center justify-center gap-2 text-sm text-white bg-primary hover:bg-green-500 py-2 px-4 rounded-button shadow transition-all duration-200">
                         <i class="ri-add-line text-lg"></i>
                         <span>카테고리 추가</span>
@@ -159,7 +159,7 @@
             </div>
 
 
-                    <!--투두리스트 카테고리 카드-->
+                    <!--투두리스트 카테고리 카드
                     <div id="todolist-card-area">
                         <div class="card bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-fit"
                             id="todolist-card">
@@ -191,7 +191,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
+
             <!--이 코드가 캘린더랑 일일 투두 나란히 띄워주고 있으니 삭제하면 안돼요!-->
             <div class="flex-1 min-h-0 flex flex-col">
                 <div class="grid grid-cols-2 gap-6 h-full min-h-0 flex-1">
@@ -204,6 +205,7 @@
                                 <!--🔵구현했습니다.-->
                                 <h3 class="font-medium" id="calendertop-date">5월 2025</h3>
                                 <div class="flex">
+
                                     <!-- 🔴 달력 이전 버튼: id="lastmonth-button": 바뀌게 연동-->
                                     <!--🔵구현했습니다.-->
                                     <button
@@ -211,7 +213,6 @@
                                         id="lastmonth-button">
                                         <i class="ri-arrow-left-s-line"></i>
                                     </button>
-
                                     <!--🔴 달력 이후 버튼: id"nextmonth-button": 바뀌게 연동-->
                                     <!--🔵구현했습니다.-->
                                     <button
@@ -249,35 +250,23 @@
                         <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex-1 flex flex-col min-h-0">
 
                             <div class="flex justify-between items-center mb-4">
-                                <!--🔴 오늘 날짜: 동적으로 업데이트되게 바꿔야합니다.-->
-                                <!--🔵구현했습니다.-->
                                 <h3 class="font-medium" id="today-todo-date">5/20</h3>
                                 <!--🔴 투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
                                 <span class="text-xs text-gray-500">10개의 항목</span>
                             </div>
 
+
                             <!--투두리스트 동적으로 구현하는 것 필요 + DB/파일 등등..쨋든 정보 저장하는 방법 구현 필요-->
-                            <!-- 마음 카테고리 -->
+                            <!-- 팀플 카테고리 -->
                             <div class="mb-5">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-sm font-medium text-green-500">마음</h4>
+                                <div class="todolist-card" id="todo-card"></div>
+
                                 </div>
-                                <ul class="space-y-2">
-                                    <li class="task-item flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" class="custom-checkbox">
-                                            <span class="ml-2 text-sm">명상 10분 하기</span>
-                                        </div>
-                                        <!--🔴 편집 및 삭제 버튼: 눌렀을 때 동작하도록 코딩해야함-->
-                                        <div class="task-actions flex">
-                                            <button
-                                                class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                                                <i class="ri-edit-line"></i>
-                                            </button>
-                                            <button
-                                                class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                                                <i class="ri-delete-bin-line"></i>
-                                            </button>
+                                <button id="addtodo">+추가하기</button>
+                             </div>
+
+
+
                                         </div>
                                     </li>
                                 </ul>
@@ -291,6 +280,46 @@
     </div>
 
     <script>
+        //카드
+        document.getElementById('addtodo').addEventListener('click', addtodolist);
+            function addtodolist() {
+                const Area = document.createElement('todo-card');
+
+                category = "팀플";
+                todo = "일하기";
+
+                Area.innerHTML = `<div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-green-500">${category}</h4>
+                            </div>
+                            <ul class="space-y-2">
+                                <li class="task-item flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" class="custom-checkbox">
+                                        <span class="ml-2 text-sm" id="todolist-context">${todo}</span>
+                                    </div>
+                                    <div class="task-actions flex">
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>`;
+                const todoArea = document.getElementById("todoarea");
+                todoArea.appendChild(Area);
+
+                Area.querySelector('.ri-delete-bin-line').addEventListener('click', function() {
+                    Area.remove();
+                li.querySelector('.')
+                })
+            }
+
+
+
         //이전/이후 > 또는 < 누르면 달력 바뀌게하는 기능
         const today = new Date();
         let defaultmonth = today.getMonth() + 1;
@@ -314,6 +343,7 @@
             }
             renderCalender(defaultyear, defaultmonth);
         });
+
 
         //이전/이후 버튼 누르면 달력 자동으로 만들어지게 하는 함수
         function renderCalender(year, month) {
@@ -385,42 +415,43 @@
             });
         });
 
-        // 투두리스트 카드 동적 생성 예시
-        const todolistcard = document.getElementById('todolist-card-area');
-        todolistcard.innerHTML = `<div class="card bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-fit" id="todolist-card">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <div class="flex items-center">
-                                            <div class="w-6 h-6 flex items-center justify-center mr-2 text-orange-500">
-                                                <i class="ri-run-line"></i>
-                                            </div>
-                                            <h3 class="font-medium" id="category">운동</h3>
-                                        </div>
-                                        <span class="text-xs text-gray-500" id="category-todo-number">3개 항목</span>
-                                    </div>
-                                    <ul class="space-y-2" id="todo"></ul>
-                                        <div class="flex items-center justify-center mt-3">
-                                            <button class="text-sm text-gray-500 hover:text-primary flex items-center" id="addtodo">
-                                                <div class="w-4 h-4 flex items-center justify-center mr-1">
-                                                    <i class="ri-add-line"></i>
-                                                </div>
-                                                추가하기
-                                            </button>
-                                        </div>
-                                </div>`;
+            //
+            function loadTodoListByDate(month, day){
+                // 현재는 기능 구현 X
+                console.log(`Load todos for ${month}/${day}`);
+            }
 
-        const todoList = [
-            { todo: "아침 조깅 30분", state: true },
-            { todo: "스트레칭 10분", state: false },
-            { todo: "근력 운동 20분", state: false }
-        ];
+             // 🔄 달력 날짜 클릭 시 투두 불러오는 이벤트 연결
+            document.getElementById('달력').addEventListener('click', function (e) {
+                if (e.target.classList.contains('day')) {
+                    const selectedDay = parseInt(e.target.textContent);
+                    const selectedMonth = defaultmonth;
+                    loadTodoListByDate(selectedMonth, selectedDay);
 
-        const ul = todolistcard.querySelector('#todo');
-        todoList.forEach(item => {
-            ul.innerHTML += `<li class="flex items-start">
+                    // UI 업데이트
+                    document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
+                    e.target.classList.add('active', 'bg-primary', 'text-white');
+
+                    document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium">${selectedMonth}/${selectedDay}</h3>`;
+                }
+            });
+
+
+            // 📌 페이지 로딩 시 오늘 날짜 기준으로 자동 로딩
+            document.addEventListener('DOMContentLoaded', function () {
+                const today = new Date();
+                loadTodoListByDate(today.getMonth() + 1, today.getDate());
+            });
+
+
+            const ul = todolistcard.querySelector('#todo');
+            todoList.forEach(item => {
+                ul.innerHTML += `<li class="flex items-start">
                                 <input type="checkbox" class="custom-checkbox mt-1" ${item.state ? "checked" : ""}>
                                 <span class="ml-2 text-sm ${item.state ? "line-through text-gray-500" : ""}">${item.todo}</span>
                                 </li>`;
-        });
+            });
+
 
 
     // ✅ 카테고리 동작 바인딩 함수
