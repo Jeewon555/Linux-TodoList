@@ -1,20 +1,82 @@
-/* style.css */
+:where([class^="ri-"])::before {
+  content: "\f3c2";
+}
 
-body {
+/* -------------------- 공통 설정 -------------------- */
+html, body {
+  height: 100%;
+  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
   background-color: #f4f4f4;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  font-family: 'Arial', sans-serif;
 }
 
+/* -------------------- 체크박스 -------------------- */
+.custom-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.custom-checkbox:checked {
+  background-color: #4ade80;
+  border-color: #4ade80;
+}
+.custom-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* -------------------- 투두/카테고리 액션 -------------------- */
+.task-item:hover .task-actions,
+.category-item:hover .category-actions {
+  opacity: 1;
+}
+.task-actions,
+.category-actions {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* -------------------- 캘린더 날짜 -------------------- */
+.day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.day:hover {
+  background-color: #e6f7ef;
+}
+.day.active {
+  background-color: #4ade80;
+  color: white;
+}
+
+/* -------------------- 로그인 & 입력폼 -------------------- */
 .check-btn, .container, .wrapper {
   text-align: center;
 }
-
-/* CHECK ME! 버튼 스타일 */
 .check-icon {
   width: 40px;
   height: 40px;
@@ -26,47 +88,40 @@ body {
   justify-content: center;
   align-items: center;
   margin: auto;
-  border: none;            /* 버튼일 경우 기본 테두리 제거 */
-  cursor: pointer;         /* 손가락 커서 표시 */
-  text-decoration: none;   /* 링크 밑줄 제거 */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 }
-
-
 .check-label {
   margin-top: 10px;
   font-weight: bold;
 }
 
-/* 로그인 화면 전용 */
 .container {
   display: flex;
   align-items: center;
   gap: 20px;
 }
-
 .form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 .submit {
   margin-top: 5px;
 }
-
 input {
   background-color: #eaf7ea;
   border: none;
   padding: 8px;
   border-radius: 4px;
 }
-
 label {
   font-size: 14px;
   text-align: left;
 }
 
-/* 투두리스트 화면 전용 */
+/* -------------------- 투두리스트 테이블 -------------------- */
 .header {
   background-color: #d3d3d3;
   padding: 6px 12px;
@@ -74,12 +129,10 @@ label {
   margin: 10px 0;
   display: inline-block;
 }
-
 table {
   margin: auto;
   border-collapse: collapse;
 }
-
 th, td {
   width: 40px;
   height: 40px;
@@ -87,54 +140,46 @@ th, td {
   border-radius: 20px;
   background-color: #e2f3e2;
 }
-
 th {
   background-color: white;
   font-weight: normal;
 }
-
 .wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/*------------------------------------------------스크롤바 디자인 -------------------------------------------------------*/
- .todo-row {
-    display: flex;
-    gap: 1rem; /* Tailwind gap-4 */
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
+/* -------------------- 스크롤 카드 행 -------------------- */
+.todo-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.todo-row::-webkit-scrollbar {
+  height: 8px;
+}
+.todo-row::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+}
 
-  .todo-row::-webkit-scrollbar {
-    height: 8px;
-  }
-  .todo-row::-webkit-scrollbar-thumb {
-    background: #bbb;
-    border-radius: 4px;
-  }
-  .todo-row {
-    scrollbar-width: thin;
-  }
-
+/* -------------------- 카드 반응형 -------------------- */
+.card {
+  flex: 0 0 calc((100% - 3rem) / 4);
+  scroll-snap-align: start;
+}
+@media (max-width: 1024px) {
   .card {
-    flex: 0 0 calc((100% - 3rem) / 4); /* 4장만 보이게 */
-    scroll-snap-align: start;
+    flex: 0 0 calc((100% - 2rem) / 3);
   }
-
-  /* 반응형: 필요 시 카드 폭 조정 */
-  @media (max-width: 1024px) {
-    .card {
-      flex: 0 0 calc((100% - 2rem) / 3);
-    }
+}
+@media (max-width: 640px) {
+  .card {
+    flex: 0 0 calc((100% - 1rem) / 2);
   }
-  @media (max-width: 640px) {
-    .card {
-      flex: 0 0 calc((100% - 1rem) / 2);
-    }
-  }
-
-/*--------------------------------------------------------------------------------------------------------------------*/
+}

@@ -199,64 +199,11 @@
     <script>
 
         document.getElementById('addtodo').addEventListener('click', addtodolist);
-
-        function loadtodolist(month, day) {
-            console.log(month, day);
-            
-
-            const todos = ["웃기", "놀기", "먹기", "자기", "자기", "자프실과제하기"];
-
-            // 기존 내용 지우기
-            const todoArea = document.getElementById("todoarea");
-            todoArea.innerHTML = ''; // 기존 todo들 제거
-
-            const Area = document.createElement('div');
-            Area.className = "mb-2";
-
-            const ul = document.createElement('ul');
-            ul.className = "space-y-2";
-
-            for (let todo of todos) {
-                const li = document.createElement('li');
-                li.className = "task-item flex items-center justify-between";
-                li.innerHTML = `
-            <div class="flex items-center">
-                <input type="checkbox" class="custom-checkbox">
-                <span class="ml-2 text-base">${todo}</span>
-            </div>
-            <div class="task-actions flex">
-                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                    <i class="ri-edit-line"></i>
-                </button>
-                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500 delete-btn">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            </div>
-        `;
-
-                // 체크박스 이벤트 연결
-                const checkbox = li.querySelector('.custom-checkbox');
-                const span = li.querySelector('span');
-                checkbox.addEventListener('change', function () {
-                    span.classList.toggle('line-through', this.checked);
-                    span.classList.toggle('text-gray-500', this.checked);
-                });
-
-                // 삭제 버튼 이벤트 연결
-                li.querySelector('.delete-btn').addEventListener('click', () => {
-                    li.remove();
-                });
-
-                ul.appendChild(li);
-            }
-
-            Area.appendChild(ul);
-            todoArea.appendChild(Area);
-        }
-
         function addtodolist() {
-            const Area = document.createElement('div');
-            todo = "새로운 할 일";
+            const Area = document.createElement('todo-card');
+
+            category = "마음";
+            todo = "일하기";
 
             Area.innerHTML = ` <div class="mb-2">
                                
@@ -264,47 +211,30 @@
                                     <li class="task-item flex items-center justify-between" id="todolist-box">
                                         <div class="flex items-center">
                                             <input type="checkbox" class="custom-checkbox">
-                                            <span class="ml-2 text-base" id="todolist-context">${todo}</span>
-                                        </div>
-                                        <div class="task-actions flex">
-                                            <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                                                <i class="ri-edit-line"></i>
-                                            </button>
-                                            <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                                                <i class="ri-delete-bin-line"></i>
-                                            </button>
-                                        </div>
-                                    </li>
-                                </ul>
-                                </div>`;
+                                            <span class="ml-2 text-sm" id="todolist-context">${todo}</span>
+                                    </div>
+                                    <div class="task-actions flex">
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul></div>`;
             const todoArea = document.getElementById("todoarea");
             todoArea.appendChild(Area);
-
-            const checkbox = Area.querySelector('.custom-checkbox');
-            const taskText = Area.querySelector('#todolist-context');
 
             Area.querySelector('.ri-delete-bin-line').addEventListener('click', function () {
                 Area.remove();
                 li.querySelector('.')
             })
 
-            Area.querySelector('.ri-edit-line').addEventListener('click',()=>{
-                taskText.setAttribute('contenteditable','true');
-                taskText.focus();
-
-                taskText.addEventListener('keydown',(e)=>{
-                    if(e.key == 'Enter'){
-                        e.preventDefault();
-                        taskText.blur();
-                    }
-                })
-                taskText.addEventListener('blur',()=>{
-                    taskText.setAttribute('contenteditable','false');
-                }, {once: true})
-            }
-        );
-
-            
+            const checkbox = Area.querySelector('.custom-checkbox');
+            const taskText = Area.querySelector('#todolist-context');
             checkbox.addEventListener('change', function () {
                 if (this.checked) {
                     taskText.classList.add('line-through', 'text-gray-500');
@@ -315,12 +245,6 @@
             });
 
         }
-
-        //할 일 편집하는 기능
-        function edittodolist(){
-            const editArea = document.getElementById()
-        }
-
         //이전/이후 > 또는 < 누르면 달력 바뀌게하는 기능
         const today = new Date();
         let defaultmonth = today.getMonth() + 1;
@@ -394,28 +318,118 @@
 
             // 캘린더 날짜 선택 기능
             document.getElementById('달력').addEventListener('click', function (e) {
-                if(e.target.className=="day text-gray-400"){
-                    document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
-                    e.target.classList.add('active', 'bg-primary', 'text-white');
-
-                    tmp = defaultmonth -1;
-                    console.log(tmp);
-
-                    document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium" id="today-todo-date">${tmp}/${e.target.textContent}`
-                    document.getElementById('top-today-todo-date').textContent = `${tmp}/${e.target.textContent} 오늘의 todo`;
-                    document.getElementById('today-todo-date').textContent = `${tmp}/${e.target.textContent}`;
-                    loadtodolist(tmp, e.target.textContent);
-                }
-                else if (e.target.classList.contains('day')) {
+                if (e.target.classList.contains('day')) {
                     document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
                     e.target.classList.add('active', 'bg-primary', 'text-white');
 
                     document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium" id="today-todo-date">${defaultmonth}/${e.target.textContent}`
                     document.getElementById('top-today-todo-date').textContent = `${defaultmonth}/${e.target.textContent} 오늘의 todo`;
                     document.getElementById('today-todo-date').textContent = `${defaultmonth}/${e.target.textContent}`;
-                    loadtodolist(defaultmonth, e.target.textContent);
                 }
             });
+
+            // 카테고리 선택 기능
+            const categoryItems = document.querySelectorAll('.sidebar .flex.items-center.px-3.py-2');
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // 현재 선택된 카테고리 클래스 제거
+                    document.querySelector('.sidebar .flex.items-center.px-3.py-2.bg-green-50')?.classList.remove('bg-green-50');
+                    // 새로 선택한 카테고리에 클래스 추가
+                    this.classList.add('bg-green-50');
+                });
+            });
+        });
+
+
+
+        // 🔄 달력 날짜 클릭 시 투두 불러오는 이벤트 연결
+        document.getElementById('달력').addEventListener('click', function (e) {
+            if (e.target.classList.contains('day')) {
+                const selectedDay = parseInt(e.target.textContent);
+                const selectedMonth = defaultmonth;
+                loadTodoListByDate(selectedMonth, selectedDay);
+
+                // UI 업데이트
+                document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
+                e.target.classList.add('active', 'bg-primary', 'text-white');
+
+                document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium">${selectedMonth}/${selectedDay}</h3>`;
+            }
+        });
+
+        // 📌 페이지 로딩 시 오늘 날짜 기준으로 자동 로딩
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            loadTodoListByDate(today.getMonth() + 1, today.getDate());
+        });
+
+
+
+         //투두리스트 안짝 로드해서 추가시키는거
+        const ul = todolistcard.querySelector('#todo');
+        todoList.forEach(item => {
+            ul.innerHTML += `<li class="flex items-start">
+                                <input type="checkbox" class="custom-checkbox mt-1" ${item.state ? "checked" : ""}>
+                                <span class="ml-2 text-sm ${item.state ? "line-through text-gray-500" : ""}">${item.todo}</span>
+                                </li>`;
+        });
+
+
+        // ✅ 카테고리 동작 바인딩 함수
+        function activateCategoryItemEvents(item) {
+            const textElement = item.querySelector('.category-name');
+            const editBtn = item.querySelector('.edit-btn');
+            const deleteBtn = item.querySelector('.delete-btn');
+
+            // 선택 시 강조 표시
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
+                item.classList.add('bg-green-50');
+            });
+
+            // ✅ 수정 버튼 클릭 시 contenteditable 적용
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                textElement.setAttribute('contenteditable', 'true');
+                textElement.focus();
+                textElement.addEventListener('blur', () => {
+                    textElement.setAttribute('contenteditable', 'false');
+                }, { once: true });
+            });
+
+            // ✅ 삭제 버튼 클릭 시
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                item.remove();
+            });
+        }
+
+        // ✅ 초기 카테고리에 이벤트 바인딩
+        activateCategoryItemEvents(document.querySelector('.category-item'));
+
+        // ✅ 카테고리 추가 기능
+        document.getElementById('addCategoryBtn').addEventListener('click', () => {
+            const newItem = document.createElement('div');
+            newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
+            newItem.innerHTML = `
+            <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
+                <i class="ri-heart-line"></i>
+            </div>
+            <span class="category-name text-blue-600 font-medium" contenteditable="false">새 카테고리</span>
+
+            <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
+                <button class="edit-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <i class="ri-edit-line"></i>
+                </button>
+                <button class="delete-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>`;
+
+            const container = document.getElementById('categoryListContainer');
+            const addButton = document.getElementById('addCategoryBtn');
+            container.insertBefore(newItem, addButton); // ✅ 추가 버튼 바로 위에 삽입
+            activateCategoryItemEvents(newItem);
         });
     </script>
 </body>
