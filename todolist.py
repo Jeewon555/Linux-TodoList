@@ -92,7 +92,7 @@ def taskmain():
     if category_name:
         query = query.filter_by(category=category_name)
     todos = query.all()
-    return render_template("temptaskpage.html", todos=todos, categories=categories, month=month, day=day, category_name=category_name)
+    return render_template("taskmain.html", todos=todos, categories=categories, month=month, day=day, category_name=category_name)
 
 @app.route('/api/todolist')
 def get_todolist():
