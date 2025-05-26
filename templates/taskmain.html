@@ -118,13 +118,13 @@
                 <!-- ✅ 카테고리 추가 버튼 id (id 추가함)-->
                 <div class="space-y-1" id="categoryListContainer">
 
-                    <!--팀플 카테고리(기본으로 1개만)-->
+                    <!--공부 카테고리(기본으로 1개만)-->
                     <div class="category-item flex items-center px-3 py-2 rounded bg-green-50 hover:bg-gray-50 group">
                         <div class="w-6 h-6 flex items-center justify-center mr-2 text-green-500">
                             <i class="ri-heart-line"></i>
                         </div>
                         <!-- ✅ 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
-                        <span contenteditable="false" class="category-name text-green-600 font-medium">팀플</span>
+                        <span contenteditable="false" class="category-name text-green-600 font-medium">공부</span>
                         <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
                             <!-- ✅ 연필 아이콘 ("eidt-btn" 추가) -->
                             <button class="edit-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
@@ -154,12 +154,12 @@
             </div>
             <div class="flex items-center mb-6">
                 <!--**오늘의 날짜 + 남은 할 일 목록**-->
-                <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">5/21 오늘의 todo</h2>
-                <span class="ml-2 text-sm text-gray-500" id="today-listnum">13개의 항목</span>
+                <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">5/20 오늘의 todo</h2>
+                <span class="ml-2 text-sm text-gray-500" id="today-listnum">1개의 항목</span>
             </div>
 
 
-                    <!--투두리스트 카테고리 카드-->
+                    <!--투두리스트 카테고리 카드(왼쪽하단)-->
                     <div id="todolist-card-area">
                         <div class="card bg-white border border-gray-200 rounded-lg p-4 shadow-sm h-fit"
                             id="todolist-card">
@@ -168,15 +168,15 @@
                                     <div class="w-6 h-6 flex items-center justify-center mr-2 text-orange-500">
                                         <i class="ri-run-line"></i>
                                     </div>
-                                    <h3 class="font-medium" id="category">운동</h3>
+                                    <h3 class="font-medium" id="category">공부</h3>
                                 </div>
-                                <span class="text-xs text-gray-500" id="category-todo-number">3개 항목</span>
+                                <span class="text-xs text-gray-500" id="category-todo-number">1개 항목</span>
                             </div>
 
                             <ul class="space-y-2" id="todo">
                                 <li class="flex items-start">
                                     <input type="checkbox" class="custom-checkbox mt-1" checked>
-                                    <span class="ml-2 text-sm line-through text-gray-500">아침 조깅 30분</span>
+                                    <span class="ml-2 text-sm line-through text-gray-500">리눅스 팀플 회의</span>
                                 </li>
                             </ul>
 
@@ -252,12 +252,14 @@
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-medium" id="today-todo-date">5/20</h3>
                                 <!--🔴 투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
-                                <span class="text-xs text-gray-500">10개의 항목</span>
+                                <span class="text-xs text-gray-500">1개의 항목</span>
                             </div>
 
+                                <!-- 🔵 일일 투두 내 카테고리 영역 -->
+                            <div id="todo-category-section" class ="space-y-2 mb-4"></div>
 
                             <!--투두리스트 동적으로 구현하는 것 필요 + DB/파일 등등..쨋든 정보 저장하는 방법 구현 필요-->
-                            <!-- 팀플 카테고리 (id 변경함)-->
+                            <!-- 공부 카테고리 (id 변경함)-->
                             <div class="mb-5">
                                 <div class="todolist-card" id="todoarea"></div>
 
@@ -337,10 +339,9 @@
 
             Area.appendChild(ul);
             todoArea.appendChild(Area);
-        }
 
 
-        function addtodolist() {
+            //✔️ 수정(중복된 addtodolist 함수 제거)
             const Area = document.createElement('div');
             todo = "새로운 할 일";
 
@@ -401,6 +402,8 @@
             });
 
         }
+
+
 
         //할 일 편집하는 기능
         function edittodolist(){
@@ -495,25 +498,112 @@
 
 
 
+        //🔵 좌측에서 카테고리 추가/편집/삭제 시 우측 투두리스트와 동기화 되도록 수정
+        let selectedCategory = '공부'; // 기본 선택 카테고리
+
+        function refreshSelectedCategory() {
+            const selected = document.querySelector('.category-item.bg-green-50 .category-name');
+            if (selected) {
+                selectedCategory = selected.textContent.trim();
+            }
+        }
+
+        function loadTodoListForCategoryAndDate() {
+            refreshSelectedCategory();
+            syncCategoryListToTodoSection();
+            console.log(`불러오기: 카테고리=${selectedCategory}, 날짜=${defaultmonth}/${today.getDate()}`);
+            // 실제 할 일 로딩 로직 추가 필요
+        }
+        //🔵여기까진 추가함 --> 투두리스트
 
 
             // 카테고리 선택 기능
             const categoryItems = document.querySelectorAll('.sidebar .flex.items-center.px-3.py-2');
+
             categoryItems.forEach(item => {
                 item.addEventListener('click', function () {
                     // 현재 선택된 카테고리 클래스 제거
                     document.querySelector('.sidebar .flex.items-center.px-3.py-2.bg-green-50')?.classList.remove('bg-green-50');
                     // 새로 선택한 카테고리에 클래스 추가
                     this.classList.add('bg-green-50');
+                    //🔵 카테고리 선택 시 동기화(이거 한줄) --> 투두리스트
+                    loadTodoListForCategoryAndDate();
                 });
             });
         });
 
-            //
-            function loadTodoListByDate(month, day){
-                // 현재는 기능 구현 X
-                console.log(`Load todos for ${month}/${day}`);
+
+
+        //🔵 왼쪽 카테고리를 일일 투두 섹션과 동기화하는 함수
+function syncCategoryListToTodoSection() {
+    const todoCategoryContainer = document.getElementById('todo-category-section');
+    if (!todoCategoryContainer) return;
+    todoCategoryContainer.innerHTML = '';
+
+    const categoryItems = document.querySelectorAll('.category-item');
+
+    categoryItems.forEach(item => {
+        const name = item.querySelector('.category-name').textContent.trim();
+
+        const div = document.createElement('div');
+        div.className = 'category-item flex items-center justify-between py-1 px-2 bg-white border rounded mb-1';
+        div.innerHTML = `
+            <h4 class="text-sm font-medium">${name}</h4>
+            <div class="task-actions flex gap-1">
+                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 edit-btn">
+                    <i class="ri-edit-line"></i>
+                </button>
+                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500 delete-btn">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>`;
+
+        //🔵 편집 기능 반영: 카테고리 -> 일일투두에
+        const editBtn = div.querySelector('.edit-btn');
+        const deleteBtn = div.querySelector('.delete-btn');
+        const label = div.querySelector('h4');
+
+        editBtn.addEventListener('click', () => {
+            const newName = prompt('카테고리 이름 수정:', label.textContent);
+            if (newName) {
+                label.textContent = newName;
+                const original = [...categoryItems].find(i => i.querySelector('.category-name').textContent.trim() === name);
+                if (original) original.querySelector('.category-name').textContent = newName;   //✔️ 수정
+                syncCategoryListToTodoSection();
             }
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            const original = [...categoryItems].find(i => i.querySelector('.category-name').textContent.trim() === name);
+            //🔵 match로 바꿈
+            if (original) original.remove();     //✔️ 수정
+            div.remove();
+            syncCategoryListToTodoSection();
+        });
+
+        todoCategoryContainer.appendChild(div);
+    });
+}
+
+
+
+
+        //🔵 일일 투두에 카테고리 동기화 호출 (날짜???)
+        function loadTodoListByDate(month, day){
+             refreshSelectedCategory();
+             syncCategoryListToTodoSection();
+             console.log(`불러오기: 카테고리=${selectedCategory}, 날짜=${defaultmonth}/${today.getDate()}`);
+             // 실제 할 일 로딩 로직 추가 필요
+        }
+
+        const categoryItems = document.querySelectorAll('.category-item');
+        categoryItems.forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
+                item.classList.add('bg-green-50');
+                loadTodoListForCategoryAndDate();
+            });
+        });
 
 
 
@@ -526,9 +616,12 @@
 
             // 선택 시 강조 표시
             item.addEventListener('click', () => {
-            document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
-            item.classList.add('bg-green-50');
-        });
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
+                item.classList.add('bg-green-50');
+                //🔵 카테고리 추가 시 이벤트 연결 --> 투두리스트
+                loadTodoListForCategoryAndDate();
+                syncCategoryListToTodoSection(); //🔵 좌측 클릭 시 우측 실시간 반영
+            });
 
 
             // ✅ 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
@@ -539,6 +632,10 @@
 
                 textElement.addEventListener('blur', () => {
                     textElement.setAttribute('contenteditable', 'false');
+                    //🔵 카테고리 추가 시 이벤트 연결(밑에 두줄) --> 투두리스트
+                    refreshSelectedCategory();
+                    loadTodoListForCategoryAndDate();
+                    syncCategoryListToTodoSection(); //🔵 추가
                 }, { once: true });
             });
 
@@ -546,13 +643,22 @@
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 item.remove();
+                //🔵 카테고리 추가 시 이벤트 연결(밑에 두줄) --> 투두리스트
+                refreshSelectedCategory();
+                loadTodoListForCategoryAndDate();
+                syncCategoryListToTodoSection(); //🔵 추가
             });
         }
+
+
+
+
 
         // ✅ 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
         activateCategoryItemEvents(document.querySelector('.category-item'));
 
         // ✅ 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
+        //🔵 카테고리 추가 버튼 클릭 시 동기화 호출(ㅊ가함)
         document.getElementById('addCategoryBtn').addEventListener('click', () => {
             const newItem = document.createElement('div');
             newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
@@ -562,7 +668,6 @@
                     </div>
 
                     <span class="category-name text-blue-600 font-medium" contenteditable="false">새 카테고리</span>
-
                  <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
                         <button class="edit-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
                             <i class="ri-edit-line"></i>
@@ -576,6 +681,7 @@
                 const addButton = document.getElementById('addCategoryBtn');
                 container.insertBefore(newItem, addButton); // ✅ 추가 버튼 바로 위에 삽입
                 activateCategoryItemEvents(newItem);
+                syncCategoryListToTodoSection(); //🔵 추가
             });
 
     </script>
