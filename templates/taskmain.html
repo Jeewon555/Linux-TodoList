@@ -195,151 +195,16 @@
   </div>
 
   <script>
-
-    document.getElementById('addtodo').addEventListener('click', addtodolist);
-
-    function loadtodolist(month, day) {
-      console.log(month, day);
-
-      const todos = ["웃기", "놀기", "먹기", "자기", "자기", "자프실과제하기"];
-
-      // 기존 내용 지우기
-      const todoArea = document.getElementById("todoarea");
-      todoArea.innerHTML = ''; // 기존 todo들 제거
-
-      const Area = document.createElement('div');
-      Area.className = "mb-2";
-
-      const ul = document.createElement('ul');
-      ul.className = "space-y-2";
-
-      for (let todo of todos) {
-        const li = document.createElement('li');
-        li.className = "task-item flex items-center justify-between";
-        li.innerHTML = `
-            <div class="flex items-center">
-                <input type="checkbox" class="custom-checkbox">
-                <span class="ml-2 text-base" id="todolist-context">${todo}</span>
-            </div>
-            <div class="task-actions flex">
-                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 edit-btn">
-                    <i class="ri-edit-line"></i>
-                </button>
-                <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500 delete-btn">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            </div>
-        `;
-
-        const taskText = li.querySelector('#todolist-context');
-
-        // 체크박스 이벤트 연결
-        const checkbox = li.querySelector('.custom-checkbox');
-        const span = li.querySelector('span');
-        checkbox.addEventListener('change', function () {
-          span.classList.toggle('line-through', this.checked);
-          span.classList.toggle('text-gray-500', this.checked);
-        });
-
-        // 삭제 버튼 이벤트 연결
-        li.querySelector('.delete-btn').addEventListener('click', () => {
-          li.remove();
-        });
-
-        li.querySelector('.edit-btn').addEventListener('click', () => {
-          taskText.setAttribute('contenteditable', 'true');
-          taskText.focus();
-
-          taskText.addEventListener('keydown', (e) => {
-            if (e.key == 'Enter') {
-              e.preventDefault();
-              taskText.blur();
-            }
-          })
-          taskText.addEventListener('blur', () => {
-            taskText.setAttribute('contenteditable', 'false');
-          }, { once: true })
-        });
-
-        ul.appendChild(li);
-      }
-
-      Area.appendChild(ul);
-      todoArea.appendChild(Area);
-    }
-
-    function addtodolist() {
-      const Area = document.createElement('div');
-      todo = "새로운 할 일";
-
-      Area.innerHTML = ` <div class="mb-2">
-                               
-                                <ul class="space-y-2">
-                                    <li class="task-item flex items-center justify-between" id="todolist-box">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" class="custom-checkbox">
-                                            <span class="ml-2 text-base" id="todolist-context">${todo}</span>
-                                        </div>
-                                        <div class="task-actions flex">
-                                            <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                                                <i class="ri-edit-line"></i>
-                                            </button>
-                                            <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                                                <i class="ri-delete-bin-line"></i>
-                                            </button>
-                                        </div>
-                                    </li>
-                                </ul>
-                                </div>`;
-      const todoArea = document.getElementById("todoarea");
-      todoArea.appendChild(Area);
-
-      const checkbox = Area.querySelector('.custom-checkbox');
-      const taskText = Area.querySelector('#todolist-context');
-
-      Area.querySelector('.ri-delete-bin-line').addEventListener('click', function () {
-        Area.remove();
-        li.querySelector('.')
-      })
-
-      Area.querySelector('.ri-edit-line').addEventListener('click', () => {
-        taskText.setAttribute('contenteditable', 'true');
-        taskText.focus();
-
-        taskText.addEventListener('keydown', (e) => {
-          if (e.key == 'Enter') {
-            e.preventDefault();
-            taskText.blur();
-          }
-        })
-        taskText.addEventListener('blur', () => {
-          taskText.setAttribute('contenteditable', 'false');
-        }, { once: true })
-      }
-      );
-
-
-      checkbox.addEventListener('change', function () {
-        if (this.checked) {
-          taskText.classList.add('line-through', 'text-gray-500');
-        }
-        else {
-          taskText.classList.remove('line-through', 'text-gray-500');
-        }
-      });
-
-    }
-
-    //할 일 편집하는 기능
-    function edittodolist() {
-      const editArea = document.getElementById()
-    }
-
-    //이전/이후 > 또는 < 누르면 달력 바뀌게하는 기능
     const today = new Date();
     let defaultmonth = today.getMonth() + 1;
-    let defaultyear = 2025;
-    renderCalender(defaultyear, defaultmonth);
+    let defaultyear = today.getFullYear();
+    let selectedMonth = defaultmonth;
+    let selectedDay = today.getDate();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderCalender(defaultyear, defaultmonth);
+      loadtodolist(selectedMonth, selectedDay);
+    });
 
     document.getElementById('lastmonth-button').addEventListener('click', function () {
       defaultmonth--;
@@ -359,27 +224,22 @@
       renderCalender(defaultyear, defaultmonth);
     });
 
-    //이전/이후 버튼 누르면 달력 자동으로 만들어지게 하는 함수
     function renderCalender(year, month) {
-      //달력 가지고 뭐 할거면, 변수는 caldendersection입니다
       const calendersection = document.getElementById('달력');
       calendersection.innerHTML = '';
 
-      //
       const editCalenderTop = document.getElementById('calendertop-date');
-      editCalenderTop.innerHTML = '';
-      editCalenderTop.innerHTML = `<h3 class="font-medium" id="calendertop-date">${month}월 ${year}</h3>`
+      editCalenderTop.textContent = `${month}월 ${year}`;
 
-      const firstDay = new Date(year, month - 1, 1)
-      const lastDay = new Date(year, month, 0)
-
+      const firstDay = new Date(year, month - 1, 1);
+      const lastDay = new Date(year, month, 0);
       const firstWeekDay = firstDay.getDay();
       const lastMonthLastDay = new Date(year, month - 1, 0).getDate();
 
       for (let i = firstWeekDay - 1; i >= 0; i--) {
         const dayDiv = document.createElement('div');
         dayDiv.className = "flex justify-center";
-        dayDiv.innerHTML = `<div class= "day text-gray-400">${lastMonthLastDay - i}</div>`;
+        dayDiv.innerHTML = `<div class="day text-gray-400">${lastMonthLastDay - i}</div>`;
         calendersection.appendChild(dayDiv);
       }
 
@@ -387,51 +247,149 @@
         const dayDiv = document.createElement('div');
         dayDiv.className = "flex justify-center";
         dayDiv.innerHTML = `<div class="day bg-white">${d}</div>`;
-        calendersection.appendChild(dayDiv)
+        calendersection.appendChild(dayDiv);
       }
-    }
-    document.addEventListener('DOMContentLoaded', function () {
 
-      // 체크박스 누르면 회색줄가게하는 기능입니다 (디자인적 요소만 있어요)
-      const checkboxes = document.querySelectorAll('.custom-checkbox');
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-          const taskText = this.nextElementSibling;
-          if (this.checked) {
-            taskText.classList.add('line-through', 'text-gray-500');
-          }
-          else {
-            taskText.classList.remove('line-through', 'text-gray-500');
-          }
+      document.getElementById('달력').addEventListener('click', function (e) {
+        if (e.target.classList.contains('day')) {
+          document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
+          e.target.classList.add('active', 'bg-primary', 'text-white');
+
+          selectedMonth = defaultmonth;
+          selectedDay = parseInt(e.target.textContent);
+
+          document.getElementById('today-todo-date').textContent = `${selectedMonth}/${selectedDay}`;
+          document.getElementById('top-today-todo-date').textContent = `${selectedMonth}/${selectedDay} 오늘의 todo`;
+
+          loadtodolist(selectedMonth, selectedDay);
+        }
+      });
+    }
+
+    async function loadtodolist(month, day) {
+      const res = await fetch(`api/todolist?month=${month}&day=${day}`);
+      const todos = await res.json();
+
+      const todoArea = document.getElementById("todoarea");
+      todoArea.innerHTML = '';
+
+      const Area = document.createElement('div');
+      Area.className = "mb-2";
+
+      const ul = document.createElement('ul');
+      ul.className = "space-y-2";
+
+      todos.forEach(item => {
+        const li = createTodoElement(item.id, item.todo, item.state);
+        ul.appendChild(li);
+      });
+
+      Area.appendChild(ul);
+      todoArea.appendChild(Area);
+    }
+
+    function createTodoElement(id, todoText, state) {
+      const li = document.createElement('li');
+      li.className = "task-item flex items-center justify-between";
+      li.innerHTML = `
+      <div class="flex items-center">
+        <input type="checkbox" class="custom-checkbox" data-id="${id}" ${state ? 'checked' : ''}>
+        <span class="ml-2 text-base${state ? ' line-through text-gray-500' : ''}" id="todolist-context">${todoText}</span>
+      </div>
+      <div class="task-actions flex">
+        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 edit-btn" data-id="${id}">
+          <i class="ri-edit-line"></i>
+        </button>
+        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500 delete-btn" data-id="${id}">
+          <i class="ri-delete-bin-line"></i>
+        </button>
+      </div>`;
+
+      const taskText = li.querySelector('#todolist-context');
+      const checkbox = li.querySelector('.custom-checkbox');
+      const editBtn = li.querySelector('.edit-btn');
+      const deleteBtn = li.querySelector('.delete-btn');
+
+      checkbox.addEventListener('change', function () {
+        const id = this.dataset.id;
+        const checked = this.checked;
+        if (checked) {
+          taskText.classList.add('line-through', 'text-gray-500');
+        } else {
+          taskText.classList.remove('line-through', 'text-gray-500');
+        }
+        fetch('/checkbox', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id, state: checked })
         });
       });
 
-      // 캘린더 날짜 선택 기능
-      document.getElementById('달력').addEventListener('click', function (e) {
-        if (e.target.className == "day text-gray-400") {
-          document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
-          e.target.classList.add('active', 'bg-primary', 'text-white');
-
-          tmp = defaultmonth - 1;
-          console.log(tmp);
-
-          document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium" id="today-todo-date">${tmp}/${e.target.textContent}`
-          document.getElementById('top-today-todo-date').textContent = `${tmp}/${e.target.textContent} 오늘의 todo`;
-          document.getElementById('today-todo-date').textContent = `${tmp}/${e.target.textContent}`;
-          loadtodolist(tmp, e.target.textContent);
-        }
-        else if (e.target.classList.contains('day')) {
-          document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
-          e.target.classList.add('active', 'bg-primary', 'text-white');
-
-          document.getElementById('today-todo-date').innerHTML = `<h3 class="font-medium" id="today-todo-date">${defaultmonth}/${e.target.textContent}`
-          document.getElementById('top-today-todo-date').textContent = `${defaultmonth}/${e.target.textContent} 오늘의 todo`;
-          document.getElementById('today-todo-date').textContent = `${defaultmonth}/${e.target.textContent}`;
-          loadtodolist(defaultmonth, e.target.textContent);
-        }
+      editBtn.addEventListener('click', function () {
+        taskText.setAttribute('contenteditable', 'true');
+        taskText.focus();
+        taskText.addEventListener('keydown', (e) => {
+          if (e.key == 'Enter') {
+            e.preventDefault();
+            taskText.blur();
+          }
+        });
+        taskText.addEventListener('blur', () => {
+          taskText.setAttribute('contenteditable', 'false');
+          const updatedText = taskText.textContent.trim();
+          fetch('/edit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, todo: updatedText })
+          });
+        }, { once: true });
       });
+
+      deleteBtn.addEventListener('click', function () {
+        fetch('/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id })
+        }).then(() => li.remove());
+      });
+
+      return li;
+    }
+
+    document.getElementById('addtodo').addEventListener('click', function () {
+      const todoText = "새로운 할 일";
+      const state = false;
+
+      fetch('/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          todo: todoText,
+          month: selectedMonth,
+          day: selectedDay
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const li = createTodoElement(data.id, todoText, state);
+            const todoArea = document.getElementById("todoarea");
+            const ul = todoArea.querySelector('ul') || document.createElement('ul');
+            ul.className = "space-y-2";
+            ul.appendChild(li);
+            if (!todoArea.querySelector('ul')) {
+              const wrapDiv = document.createElement('div');
+              wrapDiv.className = "mb-2";
+              wrapDiv.appendChild(ul);
+              todoArea.appendChild(wrapDiv);
+            }
+          } else {
+            alert('할 일 추가 실패');
+          }
+        });
     });
   </script>
+
 </body>
 
 </html>

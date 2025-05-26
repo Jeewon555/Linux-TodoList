@@ -14,3 +14,7 @@ venv/ #아까 말한대로 무겁고, 팀원들에게는 requirements.txt 만 �
 
 
 .idea/
+
+venv/Lib/site-packages/werkzeug/routing/
+
+venv/Lib/site-packages/werkzeug/debug/
