@@ -14,106 +14,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <!--✅아이콘-->
+  <!--아이콘-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 </head>
 
 <body class="h-full w-full min-h-screen min-w-full">
   <div class="flex min-h-screen h-full w-full">
-    <!-- 사이드바 -->
-    <div class="w-64 border-r border-gray-200 bg-white">
+    <div class="w-64 border-r border-gray-200 bg-white flex-shrink-0 flex flex-col">
       <div class="p-4 border-b border-gray-200 flex items-center">
         <div class="font-['Pacifico'] text-primary text-xl">logo</div>
         <div class="w-8 h-8 flex items-center justify-center ml-auto">
           <i class="ri-menu-line text-gray-500"></i>
         </div>
       </div>
-      <div class="p-4">
+
+      <!-- id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 (class 변경) -->
+      <div id="categoryItems" class="p-4 flex-1 overflow-y-auto">
         <h2 class="text-sm font-medium text-gray-500 mb-2">카테고리</h2>
-        <div class="space-y-1">
-          <!-- 마음 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded bg-green-50">
+        <!-- 카테고리 추가 버튼 id (id 추가함)-->
+        <div class="space-y-1" id="categoryListContainer">
+
+          <!--팀플 카테고리(기본으로 1개만)-->
+          <div class="category-item flex items-center px-3 py-2 rounded bg-green-50 hover:bg-gray-50 group">
             <div class="w-6 h-6 flex items-center justify-center mr-2 text-green-500">
               <i class="ri-heart-line"></i>
             </div>
-            <span class="text-green-600 font-medium">마음</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+            <!-- 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
+            <span contenteditable="false" class="category-name text-green-600 font-medium">팀플</span>
+            <div
+              class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
+              <!-- 연필 아이콘 ("edit-btn" 추가) -->
+              <button class="edit-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
                 <i class="ri-edit-line"></i>
               </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+              <!-- 삭제 아이콘 버튼 ("delete-btn" 추가)-->
+              <button class="delete-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
                 <i class="ri-delete-bin-line"></i>
               </button>
             </div>
           </div>
-          <!-- 공부 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
-              <i class="ri-book-open-line"></i>
-            </div>
-            <span>공부</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- 팀플 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-indigo-500">
-              <i class="ri-team-line"></i>
-            </div>
-            <span>팀플</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-          <!-- 운동 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-orange-500">
-              <i class="ri-run-line"></i>
-            </div>
-            <span>운동</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-          <!-- 독서 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-purple-500">
-              <i class="ri-book-read-line"></i>
-            </div>
-            <span>독서</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
+          <!--카테고리 추가 버튼(고정버튼임)-->
+          <button id="addCategoryBtn"
+            class="mt-4 w-full flex items-center justify-center gap-2 text-sm text-white bg-primary hover:bg-green-500 py-2 px-4 rounded-button shadow transition-all duration-200">
+            <i class="ri-add-line text-lg"></i>
+            <span>카테고리 추가</span>
+          </button>
         </div>
-        <button class="mt-4 flex items-center text-sm text-gray-600 hover:text-gray-900">
-          <div class="w-5 h-5 flex items-center justify-center mr-1">
-            <i class="ri-add-line"></i>
-          </div>
-          <span>카테고리 추가</span>
-        </button>
       </div>
     </div>
 
@@ -124,8 +70,8 @@
       </div>
       <div class="flex items-center mb-6">
         <!--**오늘의 날짜 + 남은 할 일 목록**-->
-        <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">5/21 오늘의 todo</h2>
-        <span class="ml-2 text-sm text-gray-500" id="today-listnum">13개의 항목</span>
+        <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">오늘의 todo</h2>
+        <!-- <span class="ml-2 text-sm text-gray-500" id="today-listnum">13개의 항목</span> -->
       </div>
 
       <!--이 코드가 캘린더랑 일일 투두 나란히 띄워주고 있으니 삭제하면 안돼요!-->
@@ -171,9 +117,9 @@
             <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex-1 flex flex-col min-h-0">
 
               <div class="flex justify-between items-center mb-4">
-                <h3 class="font-medium" id="today-todo-date">5/20</h3>
-                <!--🔴 투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
-                <span class="text-xs text-gray-500">10개의 항목</span>
+                <h3 class="font-medium" id="today-todo-date"></h3>
+                <!--투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
+                <!-- <span class="text-xs text-gray-500">10개의 항목</span> -->
               </div>
 
               <!--투두리스트 동적으로 구현하는 것 필요 + DB/파일 등등..쨋든 정보 저장하는 방법 구현 필요-->
@@ -196,38 +142,123 @@
 
   <script>
     const today = new Date();
+    //날짜 보이는 변수들
     let defaultmonth = today.getMonth() + 1;
     let defaultyear = today.getFullYear();
     let selectedMonth = defaultmonth;
     let selectedDay = today.getDate();
 
+    //html 로드 후 진행되는 부분
     document.addEventListener('DOMContentLoaded', function () {
       renderCalender(defaultyear, defaultmonth);
       loadtodolist(selectedMonth, selectedDay);
+
+      //사이드바: 카테고리 부분
+      const categoryItems = document.querySelectorAll('.sidebar .flex.items-center.px-3.py-2');
+      categoryItems.forEach(item => {
+        item.addEventListener('click', function () {
+          // 현재 선택된 카테고리 클래스 제거
+          document.querySelector('.sidebar .flex.items-center.px-3.py-2.bg-green-50')?.classList.remove('bg-green-50');
+          // 새로 선택한 카테고리에 클래스 추가
+          this.classList.add('bg-green-50');
+        });
+      });
+
+      //카테고리 테스트용
+    // 카테고리 선택 기능
+    // 카테고리 동작 바인딩 함수
+    function activateCategoryItemEvents(item) {
+      const textElement = item.querySelector('.category-name');   //클릭
+      const editBtn = item.querySelector('.edit-button');
+      const deleteBtn = item.querySelector('.delete-button');       //삭제
+
+      // 선택 시 강조 표시
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
+        item.classList.add('bg-green-50');
+      });
+
+
+      // 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        textElement.setAttribute('contenteditable', 'true');
+        textElement.focus();
+
+        textElement.addEventListener('blur', () => {
+          textElement.setAttribute('contenteditable', 'false');
+        }, { once: true });
+      });
+
+      // 휴지통 아이콘 클릭 시
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.remove();
+      });
+    }
+
+    // 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
+    activateCategoryItemEvents(document.querySelector('.category-item'));
+
+    // 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
+    document.getElementById('addCategoryBtn').addEventListener('click', () => {
+      const newItem = document.createElement('div');
+      newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
+      newItem.innerHTML = `
+                    <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
+                        <i class="ri-heart-line"></i>
+                    </div>
+
+                    <span class="category-name text-blue-600 font-medium" contenteditable="false">새 카테고리</span>
+
+                 <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
+                        <button class="edit-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                            <i class="ri-edit-line"></i>
+                        </button>
+                        <button class="delete-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>`;
+
+      const container = document.getElementById('categoryListContainer');
+      const addButton = document.getElementById('addCategoryBtn');
+      container.insertBefore(newItem, addButton); // 추가 버튼 바로 위에 삽입
+      activateCategoryItemEvents(newItem);
     });
 
+    ///
+
+
+    });
+
+    // < 버튼과 연결: 클릭 시 발생하는 이벤트
     document.getElementById('lastmonth-button').addEventListener('click', function () {
       defaultmonth--;
       if (defaultmonth < 1) {
         defaultmonth = 12;
         defaultyear--;
       }
+      //달력 렌더링 함수 호출하면서 연, 월 인자로 전달
       renderCalender(defaultyear, defaultmonth);
     });
 
+    // > 버튼과 연결: 클릭 시 발생하는 이벤트
     document.getElementById('nextmonth-button').addEventListener('click', function () {
       defaultmonth++;
       if (defaultmonth > 12) {
         defaultmonth = 1;
         defaultyear++;
       }
+      //여기도 달력 렌더링 마지막에하면서 연, 월 인자로 전달
       renderCalender(defaultyear, defaultmonth);
     });
 
+    //달력 렌더링 함수: (연, 월) 인자로 받아서 처리
     function renderCalender(year, month) {
+      //html에서 id 달력으로 설정해둔거 불러와서 calenderselection 변수에 저장 및 초기화
       const calendersection = document.getElementById('달력');
       calendersection.innerHTML = '';
-
+      //캘린더 상단 날짜 편집
       const editCalenderTop = document.getElementById('calendertop-date');
       editCalenderTop.textContent = `${month}월 ${year}`;
 
@@ -250,7 +281,9 @@
         calendersection.appendChild(dayDiv);
       }
 
+      //달력에서 클릭 이벤트 발생시:
       document.getElementById('달력').addEventListener('click', function (e) {
+        //날짜 클릭 시 발생하는 이벤트: 날짜들에 day 클래스 지정
         if (e.target.classList.contains('day')) {
           document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
           e.target.classList.add('active', 'bg-primary', 'text-white');
@@ -258,6 +291,7 @@
           selectedMonth = defaultmonth;
           selectedDay = parseInt(e.target.textContent);
 
+          //클릭한 날짜에 맞게 날짜 바꾸도록 지정
           document.getElementById('today-todo-date').textContent = `${selectedMonth}/${selectedDay}`;
           document.getElementById('top-today-todo-date').textContent = `${selectedMonth}/${selectedDay} 오늘의 todo`;
 
@@ -266,28 +300,35 @@
       });
     }
 
+    //투두리스트 동적 로드 메소드: 클릭한 날짜의 '월, 일' 인자로 받아와서 실행
     async function loadtodolist(month, day) {
+      //'/api/todolist' 라우팅. 백엔드에서 json 형태로 DB 내용 받아옴
       const res = await fetch(`api/todolist?month=${month}&day=${day}`);
       const todos = await res.json();
 
+      //오른쪽 할 일 목록 출력되는 부분 변수에 지정 및 초기화
       const todoArea = document.getElementById("todoarea");
       todoArea.innerHTML = '';
 
+      //해당 div 아래에 추가할 요소들 생성
       const Area = document.createElement('div');
       Area.className = "mb-2";
 
       const ul = document.createElement('ul');
       ul.className = "space-y-2";
 
+      //반복문 통해 DB에 있는 할 일 목록에 맞는 할 일 목록(하나하나) 생성: 할 일 목록 id, 내용, 상태(완료-true/미완료-false)
       todos.forEach(item => {
         const li = createTodoElement(item.id, item.todo, item.state);
         ul.appendChild(li);
       });
 
+      //새로 생성한 요소 위에서 정의한 할 일 목록 지역 아래에 붙이기
       Area.appendChild(ul);
       todoArea.appendChild(Area);
     }
 
+    //할 일 목록 요소 만드는 메소드: 인자로 (할 일 id(DB용), 할 일 내용, 완료 여부) 받아옴
     function createTodoElement(id, todoText, state) {
       const li = document.createElement('li');
       li.className = "task-item flex items-center justify-between";
@@ -305,12 +346,15 @@
         </button>
       </div>`;
 
+      //새로 만드는 할 일 요소마다 "체크박스 | 할 일 내용(context) 부분 | 삭제 | 수정 버튼" 생성 및 연결
       const taskText = li.querySelector('#todolist-context');
       const checkbox = li.querySelector('.custom-checkbox');
       const editBtn = li.querySelector('.edit-btn');
       const deleteBtn = li.querySelector('.delete-btn');
 
+      //체크박스 관련 이벤트
       checkbox.addEventListener('change', function () {
+        //체크된 경우 해당 id 가져와서 상태 수정
         const id = this.dataset.id;
         const checked = this.checked;
         if (checked) {
@@ -318,6 +362,7 @@
         } else {
           taskText.classList.remove('line-through', 'text-gray-500');
         }
+        //백엔드에 상태 변경 전달
         fetch('/checkbox', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -325,9 +370,12 @@
         });
       });
 
+      //편집(연필모양) 번트 클릭 이벤트
       editBtn.addEventListener('click', function () {
+        //수정할 수 있도록 attribute 지정
         taskText.setAttribute('contenteditable', 'true');
         taskText.focus();
+        //엔터 입력으로 완성하도록 하는 부분
         taskText.addEventListener('keydown', (e) => {
           if (e.key == 'Enter') {
             e.preventDefault();
@@ -337,6 +385,7 @@
         taskText.addEventListener('blur', () => {
           taskText.setAttribute('contenteditable', 'false');
           const updatedText = taskText.textContent.trim();
+          //수정한 내용 백엔드로 전달 인자:(id, 수정한 context 내용)
           fetch('/edit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -345,21 +394,26 @@
         }, { once: true });
       });
 
+      //삭제(쓰레기통)버튼 클릭 이벤트
       deleteBtn.addEventListener('click', function () {
+        //삭제 전 할 일의 id 전달하여 해당 id DB에서 삭제
         fetch('/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: id })
-        }).then(() => li.remove());
+        }).then(() => li.remove()); //이후에 성공 반환되면 html 요소 삭제
       });
 
       return li;
     }
 
+    //할 일 추가 메소드 (+ 추가하기 버튼 클릭 이벤투)
     document.getElementById('addtodo').addEventListener('click', function () {
       const todoText = "새로운 할 일";
-      const state = false;
+      const state = false; //기본 상태 unchecked
 
+      //추가한 내용 백엔드로 전달: 선택된 월, 일(달력의 날짜 클릭 시 변경되는 변수 인자로) + 추가한 할 일 텍스트 내용
+      // + id는 데이터베이스 쪽에서 생성될 때마다 새롭게 생성되도록함
       fetch('/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -368,15 +422,15 @@
           month: selectedMonth,
           day: selectedDay
         })
-      })
+      }) //생성 성공 시 요소 추가
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            const li = createTodoElement(data.id, todoText, state);
+            const li = createTodoElement(data.id, todoText, state); //할 일 목록 요소 추가
             const todoArea = document.getElementById("todoarea");
             const ul = todoArea.querySelector('ul') || document.createElement('ul');
             ul.className = "space-y-2";
-            ul.appendChild(li);
+            ul.appendChild(li); //아래에 붙이기
             if (!todoArea.querySelector('ul')) {
               const wrapDiv = document.createElement('div');
               wrapDiv.className = "mb-2";
@@ -388,6 +442,8 @@
           }
         });
     });
+
+    
   </script>
 
 </body>
