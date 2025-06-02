@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <!--✅아이콘-->
+  <!--아이콘-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 </head>
 
@@ -142,15 +142,18 @@
 
   <script>
     const today = new Date();
+    //날짜 보이는 변수들
     let defaultmonth = today.getMonth() + 1;
     let defaultyear = today.getFullYear();
     let selectedMonth = defaultmonth;
     let selectedDay = today.getDate();
 
+    //html 로드 후 진행되는 부분
     document.addEventListener('DOMContentLoaded', function () {
       renderCalender(defaultyear, defaultmonth);
       loadtodolist(selectedMonth, selectedDay);
 
+      //사이드바: 카테고리 부분
       const categoryItems = document.querySelectorAll('.sidebar .flex.items-center.px-3.py-2');
       categoryItems.forEach(item => {
         item.addEventListener('click', function () {
@@ -228,28 +231,34 @@
 
     });
 
+    // < 버튼과 연결: 클릭 시 발생하는 이벤트
     document.getElementById('lastmonth-button').addEventListener('click', function () {
       defaultmonth--;
       if (defaultmonth < 1) {
         defaultmonth = 12;
         defaultyear--;
       }
+      //달력 렌더링 함수 호출하면서 연, 월 인자로 전달
       renderCalender(defaultyear, defaultmonth);
     });
 
+    // > 버튼과 연결: 클릭 시 발생하는 이벤트
     document.getElementById('nextmonth-button').addEventListener('click', function () {
       defaultmonth++;
       if (defaultmonth > 12) {
         defaultmonth = 1;
         defaultyear++;
       }
+      //여기도 달력 렌더링 마지막에하면서 연, 월 인자로 전달
       renderCalender(defaultyear, defaultmonth);
     });
 
+    //달력 렌더링 함수: (연, 월) 인자로 받아서 처리
     function renderCalender(year, month) {
+      //html에서 id 달력으로 설정해둔거 불러와서 calenderselection 변수에 저장 및 초기화
       const calendersection = document.getElementById('달력');
       calendersection.innerHTML = '';
-
+      //캘린더 상단 날짜 편집
       const editCalenderTop = document.getElementById('calendertop-date');
       editCalenderTop.textContent = `${month}월 ${year}`;
 
@@ -272,7 +281,9 @@
         calendersection.appendChild(dayDiv);
       }
 
+      //달력에서 클릭 이벤트 발생시:
       document.getElementById('달력').addEventListener('click', function (e) {
+        //날짜 클릭 시 발생하는 이벤트: 날짜들에 day 클래스 지정
         if (e.target.classList.contains('day')) {
           document.querySelector('.day.active')?.classList.remove('active', 'bg-primary', 'text-white');
           e.target.classList.add('active', 'bg-primary', 'text-white');
@@ -280,6 +291,7 @@
           selectedMonth = defaultmonth;
           selectedDay = parseInt(e.target.textContent);
 
+          //클릭한 날짜에 맞게 날짜 바꾸도록 지정
           document.getElementById('today-todo-date').textContent = `${selectedMonth}/${selectedDay}`;
           document.getElementById('top-today-todo-date').textContent = `${selectedMonth}/${selectedDay} 오늘의 todo`;
 
@@ -288,28 +300,35 @@
       });
     }
 
+    //투두리스트 동적 로드 메소드: 클릭한 날짜의 '월, 일' 인자로 받아와서 실행
     async function loadtodolist(month, day) {
+      //'/api/todolist' 라우팅. 백엔드에서 json 형태로 DB 내용 받아옴
       const res = await fetch(`api/todolist?month=${month}&day=${day}`);
       const todos = await res.json();
 
+      //오른쪽 할 일 목록 출력되는 부분 변수에 지정 및 초기화
       const todoArea = document.getElementById("todoarea");
       todoArea.innerHTML = '';
 
+      //해당 div 아래에 추가할 요소들 생성
       const Area = document.createElement('div');
       Area.className = "mb-2";
 
       const ul = document.createElement('ul');
       ul.className = "space-y-2";
 
+      //반복문 통해 DB에 있는 할 일 목록에 맞는 할 일 목록(하나하나) 생성: 할 일 목록 id, 내용, 상태(완료-true/미완료-false)
       todos.forEach(item => {
         const li = createTodoElement(item.id, item.todo, item.state);
         ul.appendChild(li);
       });
 
+      //새로 생성한 요소 위에서 정의한 할 일 목록 지역 아래에 붙이기
       Area.appendChild(ul);
       todoArea.appendChild(Area);
     }
 
+    //할 일 목록 요소 만드는 메소드: 인자로 (할 일 id(DB용), 할 일 내용, 완료 여부) 받아옴
     function createTodoElement(id, todoText, state) {
       const li = document.createElement('li');
       li.className = "task-item flex items-center justify-between";
@@ -327,12 +346,15 @@
         </button>
       </div>`;
 
+      //새로 만드는 할 일 요소마다 "체크박스 | 할 일 내용(context) 부분 | 삭제 | 수정 버튼" 생성 및 연결
       const taskText = li.querySelector('#todolist-context');
       const checkbox = li.querySelector('.custom-checkbox');
       const editBtn = li.querySelector('.edit-btn');
       const deleteBtn = li.querySelector('.delete-btn');
 
+      //체크박스 관련 이벤트
       checkbox.addEventListener('change', function () {
+        //체크된 경우 해당 id 가져와서 상태 수정
         const id = this.dataset.id;
         const checked = this.checked;
         if (checked) {
@@ -340,6 +362,7 @@
         } else {
           taskText.classList.remove('line-through', 'text-gray-500');
         }
+        //백엔드에 상태 변경 전달
         fetch('/checkbox', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -347,9 +370,12 @@
         });
       });
 
+      //편집(연필모양) 번트 클릭 이벤트
       editBtn.addEventListener('click', function () {
+        //수정할 수 있도록 attribute 지정
         taskText.setAttribute('contenteditable', 'true');
         taskText.focus();
+        //엔터 입력으로 완성하도록 하는 부분
         taskText.addEventListener('keydown', (e) => {
           if (e.key == 'Enter') {
             e.preventDefault();
@@ -359,6 +385,7 @@
         taskText.addEventListener('blur', () => {
           taskText.setAttribute('contenteditable', 'false');
           const updatedText = taskText.textContent.trim();
+          //수정한 내용 백엔드로 전달 인자:(id, 수정한 context 내용)
           fetch('/edit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -367,21 +394,26 @@
         }, { once: true });
       });
 
+      //삭제(쓰레기통)버튼 클릭 이벤트
       deleteBtn.addEventListener('click', function () {
+        //삭제 전 할 일의 id 전달하여 해당 id DB에서 삭제
         fetch('/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: id })
-        }).then(() => li.remove());
+        }).then(() => li.remove()); //이후에 성공 반환되면 html 요소 삭제
       });
 
       return li;
     }
 
+    //할 일 추가 메소드 (+ 추가하기 버튼 클릭 이벤투)
     document.getElementById('addtodo').addEventListener('click', function () {
       const todoText = "새로운 할 일";
-      const state = false;
+      const state = false; //기본 상태 unchecked
 
+      //추가한 내용 백엔드로 전달: 선택된 월, 일(달력의 날짜 클릭 시 변경되는 변수 인자로) + 추가한 할 일 텍스트 내용
+      // + id는 데이터베이스 쪽에서 생성될 때마다 새롭게 생성되도록함
       fetch('/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -390,15 +422,15 @@
           month: selectedMonth,
           day: selectedDay
         })
-      })
+      }) //생성 성공 시 요소 추가
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            const li = createTodoElement(data.id, todoText, state);
+            const li = createTodoElement(data.id, todoText, state); //할 일 목록 요소 추가
             const todoArea = document.getElementById("todoarea");
             const ul = todoArea.querySelector('ul') || document.createElement('ul');
             ul.className = "space-y-2";
-            ul.appendChild(li);
+            ul.appendChild(li); //아래에 붙이기
             if (!todoArea.querySelector('ul')) {
               const wrapDiv = document.createElement('div');
               wrapDiv.className = "mb-2";
