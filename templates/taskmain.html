@@ -20,100 +20,46 @@
 
 <body class="h-full w-full min-h-screen min-w-full">
   <div class="flex min-h-screen h-full w-full">
-    <!-- 사이드바 -->
-    <div class="w-64 border-r border-gray-200 bg-white">
+    <div class="w-64 border-r border-gray-200 bg-white flex-shrink-0 flex flex-col">
       <div class="p-4 border-b border-gray-200 flex items-center">
         <div class="font-['Pacifico'] text-primary text-xl">logo</div>
         <div class="w-8 h-8 flex items-center justify-center ml-auto">
           <i class="ri-menu-line text-gray-500"></i>
         </div>
       </div>
-      <div class="p-4">
+
+      <!-- ✅ id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 (class 변경) -->
+      <div id="categoryItems" class="p-4 flex-1 overflow-y-auto">
         <h2 class="text-sm font-medium text-gray-500 mb-2">카테고리</h2>
-        <div class="space-y-1">
-          <!-- 마음 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded bg-green-50">
+        <!-- ✅ 카테고리 추가 버튼 id (id 추가함)-->
+        <div class="space-y-1" id="categoryListContainer">
+
+          <!--팀플 카테고리(기본으로 1개만)-->
+          <div class="category-item flex items-center px-3 py-2 rounded bg-green-50 hover:bg-gray-50 group">
             <div class="w-6 h-6 flex items-center justify-center mr-2 text-green-500">
               <i class="ri-heart-line"></i>
             </div>
-            <span class="text-green-600 font-medium">마음</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+            <!-- ✅ 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
+            <span contenteditable="false" class="category-name text-green-600 font-medium">팀플</span>
+            <div
+              class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
+              <!-- ✅ 연필 아이콘 ("edit-btn" 추가) -->
+              <button class="edit-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
                 <i class="ri-edit-line"></i>
               </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+              <!--✅ 삭제 아이콘 버튼 ("delete-btn" 추가)-->
+              <button class="delete-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
                 <i class="ri-delete-bin-line"></i>
               </button>
             </div>
           </div>
-          <!-- 공부 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
-              <i class="ri-book-open-line"></i>
-            </div>
-            <span>공부</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- 팀플 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-indigo-500">
-              <i class="ri-team-line"></i>
-            </div>
-            <span>팀플</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-          <!-- 운동 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-orange-500">
-              <i class="ri-run-line"></i>
-            </div>
-            <span>운동</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
-          <!-- 독서 카테고리 -->
-          <div class="category-item flex items-center px-3 py-2 rounded hover:bg-gray-50">
-            <div class="w-6 h-6 flex items-center justify-center mr-2 text-purple-500">
-              <i class="ri-book-read-line"></i>
-            </div>
-            <span>독서</span>
-            <div class="category-actions opacity-0 flex ml-auto">
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <i class="ri-edit-line"></i>
-              </button>
-              <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
-                <i class="ri-delete-bin-line"></i>
-              </button>
-            </div>
-          </div>
+          <!--✅ 카테고리 추가 버튼(고정버튼임)-->
+          <button id="addCategoryBtn"
+            class="mt-4 w-full flex items-center justify-center gap-2 text-sm text-white bg-primary hover:bg-green-500 py-2 px-4 rounded-button shadow transition-all duration-200">
+            <i class="ri-add-line text-lg"></i>
+            <span>카테고리 추가</span>
+          </button>
         </div>
-        <button class="mt-4 flex items-center text-sm text-gray-600 hover:text-gray-900">
-          <div class="w-5 h-5 flex items-center justify-center mr-1">
-            <i class="ri-add-line"></i>
-          </div>
-          <span>카테고리 추가</span>
-        </button>
       </div>
     </div>
 
@@ -124,8 +70,8 @@
       </div>
       <div class="flex items-center mb-6">
         <!--**오늘의 날짜 + 남은 할 일 목록**-->
-        <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">5/21 오늘의 todo</h2>
-        <span class="ml-2 text-sm text-gray-500" id="today-listnum">13개의 항목</span>
+        <h2 class="text-lg font-medium text-gray-900" id="top-today-todo-date">오늘의 todo</h2>
+        <!-- <span class="ml-2 text-sm text-gray-500" id="today-listnum">13개의 항목</span> -->
       </div>
 
       <!--이 코드가 캘린더랑 일일 투두 나란히 띄워주고 있으니 삭제하면 안돼요!-->
@@ -171,9 +117,9 @@
             <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex-1 flex flex-col min-h-0">
 
               <div class="flex justify-between items-center mb-4">
-                <h3 class="font-medium" id="today-todo-date">5/20</h3>
+                <h3 class="font-medium" id="today-todo-date"></h3>
                 <!--🔴 투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
-                <span class="text-xs text-gray-500">10개의 항목</span>
+                <!-- <span class="text-xs text-gray-500">10개의 항목</span> -->
               </div>
 
               <!--투두리스트 동적으로 구현하는 것 필요 + DB/파일 등등..쨋든 정보 저장하는 방법 구현 필요-->
@@ -204,6 +150,82 @@
     document.addEventListener('DOMContentLoaded', function () {
       renderCalender(defaultyear, defaultmonth);
       loadtodolist(selectedMonth, selectedDay);
+
+      const categoryItems = document.querySelectorAll('.sidebar .flex.items-center.px-3.py-2');
+      categoryItems.forEach(item => {
+        item.addEventListener('click', function () {
+          // 현재 선택된 카테고리 클래스 제거
+          document.querySelector('.sidebar .flex.items-center.px-3.py-2.bg-green-50')?.classList.remove('bg-green-50');
+          // 새로 선택한 카테고리에 클래스 추가
+          this.classList.add('bg-green-50');
+        });
+      });
+
+      //카테고리 테스트용
+    // 카테고리 선택 기능
+    // ✅ 카테고리 동작 바인딩 함수
+    function activateCategoryItemEvents(item) {
+      const textElement = item.querySelector('.category-name');   //클릭
+      const editBtn = item.querySelector('.edit-button');
+      const deleteBtn = item.querySelector('.delete-button');       //삭제
+
+      // 선택 시 강조 표시
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('bg-green-50'));
+        item.classList.add('bg-green-50');
+      });
+
+
+      // ✅ 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        textElement.setAttribute('contenteditable', 'true');
+        textElement.focus();
+
+        textElement.addEventListener('blur', () => {
+          textElement.setAttribute('contenteditable', 'false');
+        }, { once: true });
+      });
+
+      // ✅ 휴지통 아이콘 클릭 시
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.remove();
+      });
+    }
+
+    // ✅ 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
+    activateCategoryItemEvents(document.querySelector('.category-item'));
+
+    // ✅ 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
+    document.getElementById('addCategoryBtn').addEventListener('click', () => {
+      const newItem = document.createElement('div');
+      newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
+      newItem.innerHTML = `
+                    <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-500">
+                        <i class="ri-heart-line"></i>
+                    </div>
+
+                    <span class="category-name text-blue-600 font-medium" contenteditable="false">새 카테고리</span>
+
+                 <div class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
+                        <button class="edit-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                            <i class="ri-edit-line"></i>
+                        </button>
+                        <button class="delete-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>`;
+
+      const container = document.getElementById('categoryListContainer');
+      const addButton = document.getElementById('addCategoryBtn');
+      container.insertBefore(newItem, addButton); // ✅ 추가 버튼 바로 위에 삽입
+      activateCategoryItemEvents(newItem);
+    });
+
+    ///
+
+
     });
 
     document.getElementById('lastmonth-button').addEventListener('click', function () {
@@ -388,6 +410,8 @@
           }
         });
     });
+
+    
   </script>
 
 </body>
