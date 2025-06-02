@@ -36,43 +36,43 @@ def defaultpage():
     return render_template("default.html")
 
 # 로그인
-@app.route('/login', methods=["GET", "POST"])  # 로그인 URL
-def loginpage():  # 로그인 뷰
-    if request.method == "POST":  # POST 요청 시
-        user_id = request.form.get("id")  # 폼에서 id 추출
-        user_pw = request.form.get("pw")  # 폼에서 pw 추출
-        check_user = User.query.filter_by(id=user_id).first()  # 사용자 조회
+@app.route('/login', methods=["GET", "POST"])                                    # 로그인 URL
+def loginpage():                                                                      # 로그인 뷰
+    if request.method == "POST":                                                      # POST 요청 시
+        user_id = request.form.get("id")                                              # 폼에서 id 추출
+        user_pw = request.form.get("pw")                                              # 폼에서 pw 추출
+        check_user = User.query.filter_by(id=user_id).first()                         # 사용자 조회
 
-        if check_user and check_user.pw == user_pw:  # 일치 여부 확인
-            return render_template("loginsuccess.html")  # 성공 페이지
-        else:  # 실패
-            return render_template("loginfail.html")  # 실패 페이지
-    return render_template("login.html")  # GET 요청 시 로그인 폼
+        if check_user and check_user.pw == user_pw:                                   # 일치 여부 확인
+            return render_template("loginsuccess.html")                               # 성공 페이지
+        else:                                                                         # 실패
+            return render_template("loginfail.html")                                  # 실패 페이지 렌더링
+    return render_template("login.html")                                              # GET 요청 시 로그인 폼
 
 
 # 회원가입
-@app.route('/join', methods=["GET", "POST"])
-def join():
-    if request.method == "POST":
-        user_id = request.form.get("id")
-        user_pw = request.form.get("pw")
-        if User.query.filter_by(id=user_id).first():
-            return "이미 존재하는 아이디입니다."
-        new_user = User(id=user_id, pw=user_pw)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for("loginpage"))
-    return render_template("join.html")  #GET요청시 가입 폼
+@app.route('/join', methods=["GET", "POST"])                               # 회원가입 URL
+def join():                                                                     # 회원가입 뷰
+    if request.method == "POST":                                                # POST 요청
+        user_id = request.form.get("id")                                        # 입력 id
+        user_pw = request.form.get("pw")                                        # 입력 pw
+        if User.query.filter_by(id=user_id).first():                            # 중복 체크
+            return "이미 존재하는 아이디입니다."                                    # 중복 시 메시지
+        new_user = User(id=user_id, pw=user_pw)                                 # 새 유저 객체
+        db.session.add(new_user)                                                # 세션에 추가
+        db.session.commit()                                                     # 커밋
+        return redirect(url_for("loginpage"))                                   # 로그인 페이지로 리다이렉트
+    return render_template("join.html")                                         # GET 요청 시 가입 폼
 
 # 투두리스트 화면
-@app.route('/taskmain')
-def taskmain():
-    today = datetime.today()
-    month = int(request.args.get('month', today.month))
-    day = int(request.args.get('day', today.day))
-    query = listtodo.query.filter_by(month=month, day=day)  #해당날짜조회
-    todos = query.all()  #결과 리스트
-    return render_template("taskmain.html", todos=todos, month=month, day=day)
+@app.route('/taskmain')                                                         # 투두리스트 메인 URL
+def taskmain():                                                                 # 투두리스트 뷰
+    today = datetime.today()                                                    # 오늘 날짜
+    month = int(request.args.get('month', today.month))                         # 월 파라미터
+    day = int(request.args.get('day', today.day))                               # 일 파라미터
+    query = listtodo.query.filter_by(month=month, day=day)                      # 해당 날짜 조회
+    todos = query.all()                                                         # 결과 리스트
+    return render_template("taskmain.html", todos=todos, month=month, day=day)  # 템플릿 렌더링
 
 # #있는 디비 가져오는 Load용
 # @app.route('/api/todolist')
@@ -88,39 +88,27 @@ def taskmain():
 #         } for t in todos
 #     ])
 
-# ---------------------------
-# 1. 추가 (Create)
-# ---------------------------
+#############################     todo 추가하기    ##################################
 @app.route('/add', methods=['POST'])
 def add_todo():
-    data = request.get_json()  #json데이터
-    todo_text = data.get('todo')
-    state = data.get('state', False)
-    month = data.get('month', datetime.today().month)
-    day = data.get('day', datetime.today().day)
-    # new_todo 객체 생성
-    new_todo = listtodo(
-        todo=todo_text,
-        state=state,
-        month=month,
-        day=day
-    )
-    #저장
-    db.session.add(new_todo)
+    data = request.get_json()                                                   # JSON 데이터
+    todo_text = data.get('todo')                                                # 내용
+    state = data.get('state', False)                                            # 상태(기본 False)
+    month = data.get('month', datetime.today().month)                           # 월
+    day = data.get('day', datetime.today().day)                                 # 일
+    new_todo = listtodo(todo=todo_text, state=state, month=month, day=day)      # 객체 생성
+    db.session.add(new_todo)                                                    # 세션에 추가
     db.session.commit()
-    #프론트엔드가 그 항목을 식별/추가/수정할 떄 쓸 수 있게 해 줌
     return jsonify({'success': True, 'id': new_todo.id})
 
 
-# ---------------------------
-# 2. 조회 (Read)
-# ---------------------------
+##############################   todolist 보여주기 함수   ###########################
 @app.route('/api/todolist')
-def get_todolist():
-    month = int(request.args.get('month', datetime.today().month))
-    day = int(request.args.get('day', datetime.today().day))
-    todos = listtodo.query.filter_by(month=month, day=day).all()
-    return jsonify([
+def get_todolist():                                                             # 조회 함수
+    month = int(request.args.get('month', datetime.today().month))              # 월 파라미터
+    day = int(request.args.get('day', datetime.today().day))                    # 일 파라미터
+    todos = listtodo.query.filter_by(month=month, day=day).all()                # 조회
+    return jsonify([                                                            # JSON 배열 반환
         {
             'id': t.id,
             'todo': t.todo,
@@ -130,48 +118,45 @@ def get_todolist():
         } for t in todos
     ])
 
-# ---------------------------
-# 3. 상태(체크박스) 수정 (Update)
-# ---------------------------
+
+########################     checkbox 함수      #########################
 @app.route('/checkbox', methods=['POST'])
 def update_state():
-    data = request.get_json()
-    todo_id = data.get('id')
-    state = data.get('state')
-    todo = listtodo.query.get(todo_id)
-    if not todo:
-        return jsonify({'success': False, 'error': 'Not found'}), 404
-    todo.state = state
-    db.session.commit()
+    data = request.get_json()                                                   # JSON 데이터 가져오기
+    todo_id = data.get('id')                                                    # 대상 todo의 id 가져오기
+    state = data.get('state')                                                   # 해당 todo의 상태 가져오기
+    todo = listtodo.query.get(todo_id)                                          # 객체 조회
+    if not todo:                                                                # 없으면
+        return jsonify({'success': False, 'error': 'Not found'}), 404           # 404 반환
+    todo.state = state                                                          # 상태 수정
+    db.session.commit()                                                         # 저장
     return jsonify({'success': True})
 
-# ---------------------------
-# 4. 할 일 내용 수정 (Update)
-# ---------------------------
+
+########################     todo 편집 함수      #########################
 @app.route('/edit', methods=['POST'])
 def edit_todo():
-    data = request.get_json()
-    todo_id = data.get('id')
-    todo_text = data.get('todo')
-    todo = listtodo.query.get(todo_id)
-    if not todo:
-        return jsonify({'success': False, 'error': 'Not found'}), 404
-    todo.todo = todo_text
-    db.session.commit()
+    data = request.get_json()                                                    # JSON 데이터
+    todo_id = data.get('id')                                                     # 대상 id
+    todo_text = data.get('todo')                                                 # 새 내용
+    todo = listtodo.query.get(todo_id)                                           # 객체 조회
+    if not todo:                                                                 # 없으면
+        return jsonify({'success': False, 'error': 'Not found'}), 404            # 404
+    todo.todo = todo_text                                                        # 내용 수정
+    db.session.commit()                                                          # 저장
     return jsonify({'success': True})
 
-# ---------------------------
-# 5. 삭제 (Delete)
-# ---------------------------
+
+########################     todo 삭제 함수      #########################
 @app.route('/delete', methods=['POST'])
 def delete_todo():
-    data = request.get_json()
-    todo_id = data.get('id')
-    todo = listtodo.query.get(todo_id)
-    if not todo:
-        return jsonify({'success': False, 'error': 'Not found'}), 404
-    db.session.delete(todo)
-    db.session.commit()
+    data = request.get_json()                                                   # JSON 데이터 불러오기
+    todo_id = data.get('id')                                                    # 대상 todo id 가져오기
+    todo = listtodo.query.get(todo_id)                                          # todo id로 객체 조회
+    if not todo:                                                                # 없으면
+        return jsonify({'success': False, 'error': 'Not found'}), 404           # 404
+    db.session.delete(todo)                                                     # 삭제
+    db.session.commit()                                                         # 저장
     return jsonify({'success': True})
 
 
