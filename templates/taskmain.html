@@ -28,10 +28,10 @@
         </div>
       </div>
 
-      <!-- ✅ id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 (class 변경) -->
+      <!-- id="categoryItems" 추가: 추가된 카테고리 삽입 위치 지정 (class 변경) -->
       <div id="categoryItems" class="p-4 flex-1 overflow-y-auto">
         <h2 class="text-sm font-medium text-gray-500 mb-2">카테고리</h2>
-        <!-- ✅ 카테고리 추가 버튼 id (id 추가함)-->
+        <!-- 카테고리 추가 버튼 id (id 추가함)-->
         <div class="space-y-1" id="categoryListContainer">
 
           <!--팀플 카테고리(기본으로 1개만)-->
@@ -39,21 +39,21 @@
             <div class="w-6 h-6 flex items-center justify-center mr-2 text-green-500">
               <i class="ri-heart-line"></i>
             </div>
-            <!-- ✅ 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
+            <!-- 기본 카테고리 이름은 수정 가능하도록 span에 "contenteditable false" -->
             <span contenteditable="false" class="category-name text-green-600 font-medium">팀플</span>
             <div
               class="category-actions opacity-0 group-hover:opacity-100 flex ml-auto transition-opacity duration-200">
-              <!-- ✅ 연필 아이콘 ("edit-btn" 추가) -->
+              <!-- 연필 아이콘 ("edit-btn" 추가) -->
               <button class="edit-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600">
                 <i class="ri-edit-line"></i>
               </button>
-              <!--✅ 삭제 아이콘 버튼 ("delete-btn" 추가)-->
+              <!-- 삭제 아이콘 버튼 ("delete-btn" 추가)-->
               <button class="delete-button w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500">
                 <i class="ri-delete-bin-line"></i>
               </button>
             </div>
           </div>
-          <!--✅ 카테고리 추가 버튼(고정버튼임)-->
+          <!--카테고리 추가 버튼(고정버튼임)-->
           <button id="addCategoryBtn"
             class="mt-4 w-full flex items-center justify-center gap-2 text-sm text-white bg-primary hover:bg-green-500 py-2 px-4 rounded-button shadow transition-all duration-200">
             <i class="ri-add-line text-lg"></i>
@@ -118,7 +118,7 @@
 
               <div class="flex justify-between items-center mb-4">
                 <h3 class="font-medium" id="today-todo-date"></h3>
-                <!--🔴 투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
+                <!--투데이 할 일 항목 개수: 이거 아마 동적으로 바꿔야할 것 같습니다. 무리면 그냥 빼고요-->
                 <!-- <span class="text-xs text-gray-500">10개의 항목</span> -->
               </div>
 
@@ -166,7 +166,7 @@
 
       //카테고리 테스트용
     // 카테고리 선택 기능
-    // ✅ 카테고리 동작 바인딩 함수
+    // 카테고리 동작 바인딩 함수
     function activateCategoryItemEvents(item) {
       const textElement = item.querySelector('.category-name');   //클릭
       const editBtn = item.querySelector('.edit-button');
@@ -179,7 +179,7 @@
       });
 
 
-      // ✅ 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
+      // 연필 아이콘 클릭 시 contenteditable 적용(연필 아이콘 클릭 시 텍스트 수정 가능)
       editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         textElement.setAttribute('contenteditable', 'true');
@@ -190,17 +190,17 @@
         }, { once: true });
       });
 
-      // ✅ 휴지통 아이콘 클릭 시
+      // 휴지통 아이콘 클릭 시
       deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         item.remove();
       });
     }
 
-    // ✅ 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
+    // 초기 카테고리에 이벤트 바인딩수정/삭제/선택을 미리)
     activateCategoryItemEvents(document.querySelector('.category-item'));
 
-    // ✅ 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
+    // 카테고리 추가 기능(추가 버튼 클릭 시 새로운 카테고리 DOM 생성)
     document.getElementById('addCategoryBtn').addEventListener('click', () => {
       const newItem = document.createElement('div');
       newItem.className = 'category-item flex items-center px-3 py-2 rounded hover:bg-gray-50 group';
@@ -222,7 +222,7 @@
 
       const container = document.getElementById('categoryListContainer');
       const addButton = document.getElementById('addCategoryBtn');
-      container.insertBefore(newItem, addButton); // ✅ 추가 버튼 바로 위에 삽입
+      container.insertBefore(newItem, addButton); // 추가 버튼 바로 위에 삽입
       activateCategoryItemEvents(newItem);
     });
 
